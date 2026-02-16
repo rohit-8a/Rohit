@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f2f2f2;
+}
+
+.wrapper {
+    position: relative;
+    width: 750px;
+    height: 450px;
+    background: transparent;
+    border: 2px solid #000;
+    overflow: hidden;
+    box-shadow: 0 0 25px rgba(0,0,0, .5);
+}
+
+/* Diagonal Background Animation */
+.bg-animate {
+    position: absolute;
+    top: -4px;
+    right: 0;
+    width: 850px;
+    height: 600px;
+    background: linear-gradient(45deg, #f2f2f2, #000);
+    border-bottom: 3px solid #000;
+    transform: rotate(10deg) skewY(40deg);
+    transform-origin: bottom right;
+    transition: 1.5s ease;
+}
+
+.wrapper.active .bg-animate {
+    transform: rotate(0) skewY(0);
+    transition-delay: .5s;
+}
+
+/* Form Styles */
+.form-box {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-box.login {
+    left: 0;
+    padding: 0 40px;
+}
+
+.form-box.register {
+    right: 0;
+    padding: 0 40px;
+    pointer-events: none; /* Hidden initially */
+}
+
+.wrapper.active .form-box.register {
+    pointer-events: auto;
+}
+
+.input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 25px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #000;
+    font-size: 16px;
+    font-weight: 500;
+    padding-right: 28px;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-size: 16px;
+    font-weight: 500;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.input-box input:focus~label,
+.input-box input:valid~label {
+    top: -5px;
+}
+
+.btn {
+    width: 100%;
+    height: 45px;
+    background: #000;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Animation classes as seen in video code snippets [00:00:02] */
+.animation {
+    transform: translateX(0);
+    opacity: 1;
+    filter: blur(0);
+    transition: .7s ease;
+    transition-delay: calc(.1s * var(--j));
+}
+
+.wrapper.active .animation {
+    transform: translateX(-120%);
+    opacity: 0;
+    filter: blur(10px);
+    transition-delay: calc(.1s * var(--i));
+}
