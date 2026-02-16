@@ -4,56 +4,409 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Animated Login & Sign Up</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- Boxicons for UI icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #e4e9f7;
+            padding: 20px;
+        }
+
+        .wrapper {
+            position: relative;
+            width: 750px;
+            height: 480px;
+            background: #fff;
+            border: 2px solid #000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Diagonal Background Animations */
+        .bg-animate {
+            position: absolute;
+            top: -4px;
+            right: 0;
+            width: 850px;
+            height: 600px;
+            background: linear-gradient(45deg, #fff, #000);
+            border-bottom: 3px solid #000;
+            transform: rotate(10deg) skewY(40deg);
+            transform-origin: bottom right;
+            transition: 1.5s ease;
+            z-index: 5;
+        }
+
+        .wrapper.active .bg-animate {
+            transform: rotate(0) skewY(0);
+            transition-delay: 0.5s;
+        }
+
+        .bg-animate2 {
+            position: absolute;
+            top: 100%;
+            left: 250px;
+            width: 850px;
+            height: 700px;
+            background: #000;
+            border-top: 3px solid #000;
+            transform: rotate(0) skewY(0);
+            transform-origin: bottom left;
+            transition: 1.5s ease;
+            transition-delay: 0.5s;
+            z-index: 5;
+        }
+
+        .wrapper.active .bg-animate2 {
+            transform: rotate(-11deg) skewY(-40deg);
+            transition-delay: 1.2s;
+        }
+
+        .form-box {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 10;
+            transition: .6s ease;
+        }
+
+        .form-box.login {
+            left: 0;
+            padding: 0 40px;
+            color: #000;
+        }
+
+        .wrapper.active .form-box.login {
+            transform: translateX(-100%);
+            transition-delay: 0s;
+            pointer-events: none;
+        }
+
+        .form-box.register {
+            right: 0;
+            padding: 0 40px;
+            transform: translateX(100%);
+            transition-delay: 0s;
+            pointer-events: none;
+            color: #fff;
+        }
+
+        .wrapper.active .form-box.register {
+            transform: translateX(0);
+            transition-delay: 0.7s;
+            pointer-events: auto;
+        }
+
+        .form-box h2 {
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .input-box {
+            position: relative;
+            width: 100%;
+            height: 50px;
+            margin: 20px 0;
+        }
+
+        .input-box input {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            border-bottom: 2px solid #000;
+            padding-right: 28px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: .3s;
+        }
+
+        .form-box.register .input-box input {
+            border-bottom: 2px solid #fff;
+            color: #fff;
+        }
+
+        .input-box label {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            font-size: 16px;
+            font-weight: 500;
+            pointer-events: none;
+            transition: .3s;
+        }
+
+        .form-box.register .input-box label {
+            color: #fff;
+        }
+
+        .input-box input:focus~label,
+        .input-box input:valid~label {
+            top: -5px;
+            font-size: 13px;
+        }
+
+        .input-box i {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            font-size: 20px;
+        }
+
+        .form-box.register .input-box i {
+            color: #fff;
+        }
+
+        .recall-forget {
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            margin: -15px 0 15px;
+        }
+
+        .recall-forget label input {
+            accent-color: #000;
+            margin-right: 3px;
+        }
+
+        .recall-forget a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .btn {
+            position: relative;
+            width: 100%;
+            height: 45px;
+            background: #000;
+            border: 2px solid #000;
+            outline: none;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #fff;
+            font-weight: 600;
+            transition: .3s;
+            z-index: 1;
+        }
+
+        .form-box.register .btn {
+            background: #fff;
+            color: #000;
+            border: 2px solid #fff;
+        }
+
+        .logreg-link {
+            font-size: 14.5px;
+            text-align: center;
+            margin: 20px 0 10px;
+        }
+
+        .logreg-link p a {
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .form-box.register .logreg-link p a {
+            color: #fff;
+        }
+
+        .info-text {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .info-text.login {
+            right: 0;
+            text-align: right;
+            padding: 0 40px;
+            color: #fff;
+        }
+
+        .wrapper.active .info-text.login {
+            transform: translateX(100%);
+            transition-delay: 0s;
+        }
+
+        .info-text.register {
+            left: 0;
+            text-align: left;
+            padding: 0 40px;
+            color: #000;
+            transform: translateX(-100%);
+        }
+
+        .wrapper.active .info-text.register {
+            transform: translateX(0);
+            transition-delay: 0.7s;
+        }
+
+        .info-text h2 {
+            font-size: 36px;
+            line-height: 1.2;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        .info-text p {
+            font-size: 15px;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        .animation {
+            transform: translateX(0);
+            opacity: 1;
+            filter: blur(0);
+            transition: .7s ease;
+            transition-delay: calc(.1s * var(--j));
+        }
+
+        .wrapper.active .form-box.login .animation {
+            transform: translateX(-120%);
+            opacity: 0;
+            filter: blur(10px);
+            transition-delay: calc(.05s * var(--i));
+        }
+
+        .wrapper.active .info-text.login .animation {
+            transform: translateX(120%);
+            opacity: 0;
+            filter: blur(10px);
+            transition-delay: calc(.05s * var(--i));
+        }
+
+        .wrapper .form-box.register .animation {
+            transform: translateX(120%);
+            opacity: 0;
+            filter: blur(10px);
+            transition-delay: calc(.05s * var(--j));
+        }
+
+        .wrapper.active .form-box.register .animation {
+            transform: translateX(0);
+            opacity: 1;
+            filter: blur(0);
+            transition-delay: calc(.1s * var(--i));
+        }
+
+        .wrapper .info-text.register .animation {
+            transform: translateX(-120%);
+            opacity: 0;
+            filter: blur(10px);
+            transition-delay: calc(.05s * var(--j));
+        }
+
+        .wrapper.active .info-text.register .animation {
+            transform: translateX(0);
+            opacity: 1;
+            filter: blur(0);
+            transition-delay: calc(.1s * var(--i));
+        }
+
+        @media (max-width: 768px) {
+            .wrapper {
+                width: 100%;
+                max-width: 400px;
+                height: auto;
+                min-height: 520px;
+                flex-direction: column;
+            }
+            .bg-animate, .bg-animate2, .info-text { display: none; }
+            .form-box { width: 100%; position: relative; padding: 40px !important; transform: none !important; display: block; }
+            .form-box.register { display: none; background: #000; }
+            .wrapper.active .form-box.login { display: none; }
+            .wrapper.active .form-box.register { display: block; transform: none !important; }
+            .animation { transition: none; transform: none !important; opacity: 1 !important; filter: none !important; }
+        }
+    </style>
 </head>
 <body>
+
     <div class="wrapper">
         <span class="bg-animate"></span>
         <span class="bg-animate2"></span>
 
+        <!-- Login Form -->
         <div class="form-box login">
             <h2 class="animation" style="--i:0; --j:21;">Login</h2>
             <form action="#">
                 <div class="input-box animation" style="--i:1; --j:22;">
-                    <input type="text" required>
-                    <label>Username</label>
+                    <input type="text" id="login-user" required>
+                    <label for="login-user">Username</label>
                     <i class='bx bxs-user'></i>
                 </div>
                 <div class="input-box animation" style="--i:2; --j:23;">
-                    <input type="password" required>
-                    <label>Password</label>
-                    <i class='bx bxs-lock-alt' ></i>
+                    <input type="password" id="login-pass" required>
+                    <label for="login-pass">Password</label>
+                    <i class='bx bxs-lock-alt'></i>
                 </div>
-                <button type="submit" class="btn animation" style="--i:3; --j:24;">Login</button>
-                <div class="logreg-link animation" style="--i:4; --j:25;">
+                <div class="recall-forget animation" style="--i:3; --j:24;">
+                    <label><input type="checkbox"> Remember Me</label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn animation" style="--i:4; --j:25;">Login</button>
+                <div class="logreg-link animation" style="--i:5; --j:26;">
                     <p>Don't have an account? <a href="#" class="register-link">Sign Up</a></p>
                 </div>
             </form>
         </div>
 
         <div class="info-text login">
-            <h2 class="animation" style="--i:0; --j:20;">WELCOME BACK!</h2>
-            <p class="animation" style="--i:1; --j:21;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti, nam?</p>
+            <h2 class="animation" style="--i:0; --j:20;">Welcome Back!</h2>
+            <p class="animation" style="--i:1; --j:21;">Please login with your personal info.</p>
         </div>
 
+        <!-- Register Form -->
         <div class="form-box register">
             <h2 class="animation" style="--i:17; --j:0;">Sign Up</h2>
             <form action="#">
                 <div class="input-box animation" style="--i:18; --j:1;">
-                    <input type="text" required>
-                    <label>Username</label>
+                    <input type="text" id="reg-user" required>
+                    <label for="reg-user">Username</label>
                     <i class='bx bxs-user'></i>
                 </div>
                 <div class="input-box animation" style="--i:19; --j:2;">
-                    <input type="email" required>
-                    <label>Email</label>
-                    <i class='bx bxs-envelope' ></i>
+                    <input type="email" id="reg-email" required>
+                    <label for="reg-email">Email</label>
+                    <i class='bx bxs-envelope'></i>
                 </div>
                 <div class="input-box animation" style="--i:20; --j:3;">
-                    <input type="password" required>
-                    <label>Password</label>
-                    <i class='bx bxs-lock-alt' ></i>
+                    <input type="password" id="reg-pass" required>
+                    <label for="reg-pass">Password</label>
+                    <i class='bx bxs-lock-alt'></i>
                 </div>
                 <button type="submit" class="btn animation" style="--i:21; --j:4;">Sign Up</button>
                 <div class="logreg-link animation" style="--i:22; --j:5;">
@@ -63,11 +416,38 @@
         </div>
 
         <div class="info-text register">
-            <h2 class="animation" style="--i:17; --j:0;">JOIN US!</h2>
-            <p class="animation" style="--i:18; --j:1;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti, nam?</p>
+            <h2 class="animation" style="--i:17; --j:0;">Join Us!</h2>
+            <p class="animation" style="--i:18; --j:1;">Enter your personal details to start.</p>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        /**
+         * Interactive Script for handling Login/Sign-up Toggles
+         */
+        const wrapper = document.querySelector('.wrapper');
+        const registerLink = document.querySelector('.register-link');
+        const loginLink = document.querySelector('.login-link');
+
+        // Transition from Login to Register
+        registerLink.onclick = (e) => {
+            e.preventDefault();
+            wrapper.classList.add('active');
+        };
+
+        // Transition from Register back to Login
+        loginLink.onclick = (e) => {
+            e.preventDefault();
+            wrapper.classList.remove('active');
+        };
+
+        // Prevent default form submission
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                console.log('Form submission intercepted for demo.');
+            });
+        });
+    </script>
 </body>
 </html>
